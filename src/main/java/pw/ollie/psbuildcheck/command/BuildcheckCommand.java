@@ -15,6 +15,7 @@ public final class BuildcheckCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        // todo
         return true;
     }
 }

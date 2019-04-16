@@ -20,14 +20,14 @@ import java.util.Arrays;
 import java.util.List;
 
 public class InventoryGUI implements Listener {
-    protected Plugin plugin;
-    protected OptionClickHandler handler;
-
+    private Plugin plugin;
     private String name;
     private int size;
     private String[] optionNames;
     private ItemStack[] optionIcons;
     private Player player;
+
+    protected OptionClickHandler handler;
 
     private boolean recentClick;
 
@@ -119,7 +119,7 @@ public class InventoryGUI implements Listener {
         }
 
         this.recentClick = true;
-        this.plugin.getServer().getScheduler().runTaskLater(plugin, () -> InventoryGUI.this.recentClick = false, 2L);
+        this.plugin.getServer().getScheduler().runTaskLater(plugin, () -> recentClick = false, 2L);
 
         event.setCancelled(true);
         if (event.getClick() != ClickType.LEFT && event.getClick() != ClickType.RIGHT) {
