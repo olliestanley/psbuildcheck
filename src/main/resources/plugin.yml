@@ -1,0 +1,17 @@
+name: PlotSquaredBuildCheck
+version: 1.0
+main: pw.ollie.psbuildcheck.PSBCPlugin
+
+depend: [PlotSquared]
+
+commands:
+  buildcheck:
+    description: Request a build check
+  checkbuilds:
+    description: View requested build checks
+
+permissions:
+  psbc.request:
+    description: Allows requesting a build check
+  psbc.admin:
+    description: Allows checking requests
