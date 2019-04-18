@@ -4,6 +4,8 @@ main: pw.ollie.psbuildcheck.PSBCPlugin
 
 depend: [PlotSquared]
 
+api-version: 1.13
+
 commands:
   buildcheck:
     description: Request a build check

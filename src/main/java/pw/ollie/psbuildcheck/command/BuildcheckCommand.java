@@ -2,8 +2,8 @@ package pw.ollie.psbuildcheck.command;
 
 import pw.ollie.psbuildcheck.PSBCPlugin;
 import pw.ollie.psbuildcheck.check.BuildCheck;
+import pw.ollie.psbuildcheck.util.PlotSquaredUtil;
 
-import com.github.intellectualsites.plotsquared.plot.PlotSquared;
 import com.github.intellectualsites.plotsquared.plot.object.Plot;
 
 import org.bukkit.ChatColor;
@@ -12,8 +12,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.Set;
 
 public final class BuildcheckCommand implements CommandExecutor {
     private final PSBCPlugin plugin;
@@ -34,14 +32,7 @@ public final class BuildcheckCommand implements CommandExecutor {
         }
         Player player = (Player) sender;
         Location location = player.getLocation();
-        Set<Plot> plots = PlotSquared.get().getBasePlots();
-        Plot relevantPlot = null;
-        for (Plot plot : plots) {
-            if (plot.getArea().contains(location.getBlockX(), location.getBlockZ())) {
-                relevantPlot = plot;
-                break;
-            }
-        }
+        Plot relevantPlot = Plot.getPlot(PlotSquaredUtil.toPSLocation(location));
         BuildCheck buildCheck = new BuildCheck(location.getWorld().getName(), location.getBlockX(), location.getBlockY(),
                 location.getBlockZ(), relevantPlot == null ? null : relevantPlot.getAlias(), player.getName());
         plugin.getCheckManager().addCheck(buildCheck);
