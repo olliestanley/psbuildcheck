@@ -67,7 +67,6 @@ public class InventoryGUI implements Listener {
 
         player = null;
         handler = null;
-        plugin = null;
         optionNames = null;
         optionIcons = null;
         size = -1;
