@@ -17,7 +17,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 
 import java.util.Arrays;
-import java.util.List;
 
 public class InventoryGUI implements Listener {
     private Plugin plugin;
@@ -26,9 +25,7 @@ public class InventoryGUI implements Listener {
     private String[] optionNames;
     private ItemStack[] optionIcons;
     private Player player;
-
-    protected OptionClickHandler handler;
-
+    private OptionClickHandler handler;
     private boolean recentClick;
 
     public InventoryGUI(Plugin plugin, String name, int size, OptionClickHandler handler) {
@@ -42,14 +39,6 @@ public class InventoryGUI implements Listener {
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
-    public String getTitle() {
-        return this.name;
-    }
-
-    public int getSize() {
-        return this.size;
-    }
-
     public InventoryGUI setSlot(int position, ItemStack icon, String name, String... lore) {
         boolean hasLore = lore != null && lore.length > 0;
 
@@ -59,20 +48,10 @@ public class InventoryGUI implements Listener {
         return this;
     }
 
-    public InventoryGUI setSlot(int position, ItemStack icon, String name, List<String> lore) {
-        optionNames[position] = name;
-        optionIcons[position] = setDisplayNameAndLore(icon, name, lore);
-        return this;
-    }
-
-    public ItemStack getStackInSlot(int position) {
-        return this.optionIcons[position];
-    }
-
     public InventoryGUI open(Player player) {
         this.player = player;
 
-        Inventory inventory = Bukkit.createInventory(new GUIInventoryHolder(this, Bukkit.createInventory(player, size)), size, name);
+        Inventory inventory = Bukkit.createInventory(new GUIInventoryHolder(Bukkit.createInventory(player, size)), size, name);
         for (int i = 0; i < optionIcons.length; i++) {
             if (optionIcons[i] != null) {
                 inventory.setItem(i, optionIcons[i]);
@@ -129,15 +108,12 @@ public class InventoryGUI implements Listener {
 
         int slot = event.getRawSlot();
         if (slot >= 0 && slot < this.size && this.optionNames[slot] != null) {
-            OptionClick e = new OptionClick(plugin, clicker, slot, this.optionNames[slot], this.optionIcons[slot], OptionClickType.fromClickType(event.getClick()));
+            OptionClick e = new OptionClick(clicker, slot);
             this.handler.onOptionClick(e);
             clicker.updateInventory();
 
             if (e.shouldClose()) {
                 plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, clicker::closeInventory);
-            }
-            if (e.shouldDestroy()) {
-                destroy();
             }
         }
     }
@@ -163,29 +139,16 @@ public class InventoryGUI implements Listener {
     }
 
     public class OptionClick {
-        private final Plugin plugin;
         private final InventoryGUI gui;
 
         private Player player;
         private int slot;
-        private String name;
         private boolean close;
-        private boolean destroy;
-        private ItemStack item;
-        private OptionClickType type;
 
-        public OptionClick(Plugin plugin, Player player, int slot, String name, ItemStack item, OptionClickType type) {
-            this.plugin = plugin;
+        public OptionClick(Player player, int slot) {
             this.gui = InventoryGUI.this;
             this.player = player;
             this.slot = slot;
-            this.name = name;
-            this.item = item;
-            this.type = type;
-        }
-
-        public Plugin getPlugin() {
-            return plugin;
         }
 
         public InventoryGUI getGUI() {
@@ -200,60 +163,20 @@ public class InventoryGUI implements Listener {
             return slot;
         }
 
-        public String getName() {
-            return name;
-        }
-
         public boolean shouldClose() {
             return close;
-        }
-
-        public boolean shouldDestroy() {
-            return destroy;
         }
 
         public void setClose(boolean close) {
             this.close = close;
         }
-
-        public void setDestroy(boolean destroy) {
-            this.destroy = destroy;
-        }
-
-        public ItemStack getItem() {
-            return item;
-        }
-
-        public OptionClickType getClickType() {
-            return type;
-        }
-    }
-
-    public enum OptionClickType {
-        LEFT, RIGHT;
-
-        public static OptionClickType fromClickType(ClickType clickType) {
-            if (clickType.isRightClick()) {
-                return RIGHT;
-            } else if (clickType.isLeftClick()) {
-                return LEFT;
-            } else {
-                return null;
-            }
-        }
     }
 
     public class GUIInventoryHolder implements InventoryHolder {
-        private final InventoryGUI gui;
         private final Inventory inventory;
 
-        public GUIInventoryHolder(InventoryGUI gui, Inventory inventory) {
-            this.gui = gui;
+        public GUIInventoryHolder(Inventory inventory) {
             this.inventory = inventory;
-        }
-
-        public InventoryGUI getGUI() {
-            return gui;
         }
 
         @Override
@@ -279,14 +202,6 @@ public class InventoryGUI implements Listener {
         item = setDisplayName(item, name);
         ItemMeta meta = item.getItemMeta();
         meta.setLore(Arrays.asList(lore));
-        item.setItemMeta(meta);
-        return item;
-    }
-
-    private ItemStack setDisplayNameAndLore(ItemStack item, String name, List<String> lore) {
-        item = setDisplayName(item, name);
-        ItemMeta meta = item.getItemMeta();
-        meta.setLore(lore);
         item.setItemMeta(meta);
         return item;
     }

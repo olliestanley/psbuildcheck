@@ -1,5 +1,7 @@
 package pw.ollie.psbuildcheck.check;
 
+import org.bson.BasicBSONObject;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
@@ -46,5 +48,23 @@ public final class BuildCheck {
 
     public String getSubmitter() {
         return submitter;
+    }
+
+    public BasicBSONObject toBSONObject() {
+        BasicBSONObject result = new BasicBSONObject();
+        result.put("world", world);
+        result.put("x", x);
+        result.put("y", y);
+        result.put("z", z);
+        if (plotName != null) {
+            result.put("plot", plotName);
+        }
+        result.put("submitter", submitter);
+        return result;
+    }
+
+    public static BuildCheck fromBSONObject(BasicBSONObject bObj) {
+        return new BuildCheck(bObj.getString("world"), bObj.getInt("x"), bObj.getInt("y"), bObj.getInt("z"),
+                bObj.containsField("plot") ? bObj.getString("plot") : null, bObj.getString("submitter"));
     }
 }

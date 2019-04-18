@@ -1,6 +1,7 @@
 package pw.ollie.psbuildcheck.command;
 
 import pw.ollie.psbuildcheck.PSBCPlugin;
+import pw.ollie.psbuildcheck.gui.CheckBuildsGUI;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -25,7 +26,7 @@ public final class CheckbuildsCommand implements CommandExecutor {
             sender.sendMessage(ChatColor.RED + "You can't do that.");
             return true;
         }
-        plugin.getGUIManager().getCheckBuildsGUI().open((Player) sender);
+        new CheckBuildsGUI(plugin).open((Player) sender);
         return true;
     }
 }

@@ -15,7 +15,7 @@
         </repository>
         <repository>
             <id>plotsquared-repo</id>
-            <url>http://ci.athion.net/job/PlotSquared-Legacy/ws/mvn/</url>
+            <url>http://ci.athion.net/job/PlotSquared-Releases/ws/mvn</url>
         </repository>
         <repository>
             <id>sk80q</id>
@@ -24,6 +24,14 @@
         <repository>
             <id>vault</id>
             <url>http://nexus.hc.to/content/repositories/pub_releases/</url>
+        </repository>
+        <repository>
+            <id>empcraft-repo</id>
+            <url>http://empcraft.com/maven2</url>
+        </repository>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
         </repository>
     </repositories>
 
@@ -41,9 +49,9 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.plotsquared</groupId>
-            <artifactId>plotsquared-api</artifactId>
-            <version>latest</version>
+            <groupId>com.github.intellectualsites.plotsquared</groupId>
+            <artifactId>PlotSquared-API</artifactId>
+            <version>4.226</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
