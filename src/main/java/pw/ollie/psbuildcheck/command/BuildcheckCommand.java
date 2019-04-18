@@ -33,6 +33,12 @@ public final class BuildcheckCommand implements CommandExecutor {
         Player player = (Player) sender;
         Location location = player.getLocation();
         Plot relevantPlot = Plot.getPlot(PlotSquaredUtil.toPSLocation(location));
+        if (relevantPlot != null) {
+            if (relevantPlot.getOwners() != null && !relevantPlot.getOwners().contains(player.getUniqueId())) {
+                sender.sendMessage(ChatColor.RED + "You cannot submit a build on a plot you don't own.");
+                return true;
+            }
+        }
         BuildCheck buildCheck = new BuildCheck(location.getWorld().getName(), location.getBlockX(), location.getBlockY(),
                 location.getBlockZ(), relevantPlot == null ? null : relevantPlot.getAlias(), player.getName());
         plugin.getCheckManager().addCheck(buildCheck);
